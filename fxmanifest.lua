@@ -7,7 +7,7 @@ description 'An emergencycallstation script'
 
 
 -- Files Registration
-
+ui_page 'html/index.html'
 
 shared_scripts {
     '@es_extended/imports.lua',
@@ -27,3 +27,7 @@ server_scripts {
     
 }
 
+files {
+    'html/index.html', 
+    'html/sound/**.*' 
+} 

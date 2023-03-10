@@ -1,0 +1,31 @@
+<html>
+    <head>
+		<script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+		<style type="text/css">
+			html {
+				display: none;
+			}
+		</style>
+    </head>
+    <body>
+		<audio id="sos-audio" src="./sound/sos.mp3"></audio>
+		<audio id="sos2-audio" src="./sound/sos2.mp3"></audio>  
+		<script type="text/javascript">
+            $(function() {
+				let SOS = document.getElementById("sos-audio");
+				let SOS2 = document.getElementById("sos2-audio");
+				window.addEventListener("message", function(event) {
+					if (event.data.PayloadType[0] === "SOS") { 
+						SOS.play();
+					} else if (event.data.PayloadType[0] === "SOS2") {
+						SOS2.play();
+					}
+				});
+			});
+			function PlaySound(source, type) {
+			  let message = { PayloadType: [type], Payload: source };
+			  SendNUIMessage(message);
+			}
+        </script>
+    </body>
+</html>

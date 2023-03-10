@@ -11,5 +11,27 @@ Config.spawnPoints = {
 Translation = {
     BlipName = "SOS CALLBOX",
     HelpNotify = "Press ~INPUT_CONTEXT~ to interact with the callbox",
-    Notification = "You called the police!"
+    Notification = "You called the police!",
+    DispatchNotification = "SOS WAS PRESSED; EMERGENCY REQUIRED. GPS WAS SET"
 }
+
+Config.Jobs = { 
+    "police",
+    "doa", 
+    "sheriff",
+    "doj",
+    "ambulance" 
+} 
+
+-- Notification settings
+function ShowHelpNotification(msg)
+    ESX.ShowHelpNotification(Translation.HelpNotify)
+end
+ 
+function ShowNotification1(text)
+    ESX.ShowNotification(Translation.DispatchNotification,  5000, "info") 
+end 
+
+function ShowNotification2(text)
+    ESX.ShowNotification(Translation.Notification, 5000, "info")
+end 
