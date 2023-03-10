@@ -63,7 +63,7 @@ CreateThread(function()
           TaskPlayAnim(PlayerPedId(), 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
           Wait(5000)
           ClearPedTasks(PlayerPedId()) 
-          print("Funktioniert")
+          logging("Funktioniert")
           -- TODO: drecks serverevents adden für dispatch 
         end
       end    
