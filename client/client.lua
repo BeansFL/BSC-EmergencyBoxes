@@ -42,9 +42,8 @@ CreateThread(function()
     TaskTurnPedToFaceCoord(playerPed, spawnPoint.x, spawnPoint.y, spawnPoint.z, 0) 
   end
 
-  local playerPed = PlayerPedId()
-
   while true do
+    local playerPed = PlayerPedId()
 
     Wait(0)
     local playerCoords = GetEntityCoords(playerPed)
@@ -64,8 +63,10 @@ CreateThread(function()
 
           local count = 1
 
-          while count < 500 do 
+          while count < 30 do
+            Wait(1) 
             count = count + 1
+            print(count)
             DisablePlayerFiring(playerPed, true) 
           end
 
