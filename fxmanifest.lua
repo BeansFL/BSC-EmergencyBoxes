@@ -2,6 +2,8 @@
 fx_version 'cerulean'
 game 'gta5'
 lua54 'yes'
+author 'BeansFL & cmd'
+description 'An emergencycallstation script'
 
 
 -- Files Registration
