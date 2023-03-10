@@ -83,12 +83,12 @@ CreateThread(function()
 
           print("Funktioniert") 
           -- TODO: drecks serverevents adden für dispatch 
-        end
-      end    
-    end  
-  end    
-end)  
-
+          end
+        end    
+      end  
+    end    
+  end)  
+end)
 -- Delete all callbox props when the script restarts
 AddEventHandler('onResourceStop', function(resource) 
   if GetCurrentResourceName() == resource then
