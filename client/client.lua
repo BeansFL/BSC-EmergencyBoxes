@@ -86,7 +86,6 @@ CreateThread(function()
       end  
     end    
   end)  
-end)
 -- Delete all callbox props when the script restarts
 AddEventHandler('onResourceStop', function(resource) 
   if GetCurrentResourceName() == resource then
