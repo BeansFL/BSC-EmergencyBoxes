@@ -9,6 +9,7 @@ Config.spawnPoints = {
 }
 
 Translation = {
-    BlipName = "SOS CALLBOX"
-    HelpNotify = "Press ~INPUT_CONTEXT~ to interact with the callbox"
+    BlipName = "SOS CALLBOX",
+    HelpNotify = "Press ~INPUT_CONTEXT~ to interact with the callbox",
+    Notification = "You called the police!"
 }

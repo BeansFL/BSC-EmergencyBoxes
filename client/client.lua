@@ -61,6 +61,7 @@ CreateThread(function()
         -- Show help notification and check if player presses E 
         ESX.ShowHelpNotification(Translation.HelpNotify)
         if IsControlJustPressed(0, 38) then 
+          ESX.ShowNotification(Translation.Notification, 5000, "info"
 
           local count = 1
 
