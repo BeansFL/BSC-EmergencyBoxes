@@ -1,6 +1,4 @@
 local callboxProps = {} -- Table to store all callbox props
-local spawnPoints = Config.spawnPoints
-
 
 -- Function to spawn a callbox at a specific coordinate
 function spawnCallbox(x, y, z, heading)
@@ -45,7 +43,7 @@ CreateThread(function()
   end
 
   while true do
-    
+
     Wait(0)
     local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
