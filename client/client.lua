@@ -56,20 +56,19 @@ CreateThread(function()
       if distance < 2.0 then
         -- Show help notification and check if player presses E 
         ESX.ShowHelpNotification('Press ~INPUT_CONTEXT~ to interact with the callbox')
-        if IsControlJustPressed(0, 38) then
-          TaskPlayAnim(PlayerPedId(), 'anim@amb@trailer@touch_screen@"', 'idle_c', 1.0, 1.0, -1, 50, 0, false, false, false)
-          Wait(3000)
-          ClearPedTasks(PlayerPedId())  
+        if IsControlJustPressed(0, 38) then 
+          DisablePlayerFiring(PlayerPedId(), true) 
           TaskPlayAnim(PlayerPedId(), 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
-          Wait(5000)
+          Wait(5000) 
           ClearPedTasks(PlayerPedId()) 
-          logging("Funktioniert")
+          DisablePlayerFiring(PlayerPedId(), false)  
+          print("Funktioniert") 
           -- TODO: drecks serverevents adden für dispatch 
         end
       end    
     end  
   end    
-end)
+end)  
 
 -- Delete all callbox props when the script restarts
 AddEventHandler('onResourceStop', function(resource) 
