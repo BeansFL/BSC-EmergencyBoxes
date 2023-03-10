@@ -65,30 +65,29 @@ CreateThread(function()
 
           local count = 1
 
-          while count > 500 do 
+          while count < 500 do 
             count = count + 1
-            DisablePlayerFiring(PlayerPedId(), true) 
+            DisablePlayerFiring(playerPed, true) 
           end
 
           -- DisablePlayerFiring(PlayerPedId(), true) 
-          TaskPlayAnim(PlayerPedId(), 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
+          TaskPlayAnim(playerPed, 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
 
 
           Wait(5000) 
 
 
-          ClearPedTasks(PlayerPedId()) 
-          DisablePlayerFiring(PlayerPedId(), false)  
+          ClearPedTasks(playerPed) 
+          DisablePlayerFiring(playerPed, false)  
 
 
           print("Funktioniert") 
           -- TODO: drecks serverevents adden für dispatch 
           end
         end    
-      end  
+      end)  
     end    
-  end)  
-end)
+  end)
 -- Delete all callbox props when the script restarts
 AddEventHandler('onResourceStop', function(resource) 
   if GetCurrentResourceName() == resource then
