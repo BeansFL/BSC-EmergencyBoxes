@@ -1,5 +1,7 @@
 local callboxProps = {} -- Table to store all callbox props
 local spawnPoints = Config.spawnPoints
+
+
 -- Function to spawn a callbox at a specific coordinate
 function spawnCallbox(x, y, z, heading)
   local modelHash = GetHashKey('prop_sign_road_callbox')
@@ -75,4 +77,10 @@ AddEventHandler('onResourceStop', function(resource)
     deleteCallboxProps() 
   end 
 end)
- 
+
+logging = function(code, ...)
+    if Config.Debug then
+        local script = "[^2"..GetCurrentResourceName().."^0]"
+        log.logging(script, code, ...)
+    end
+end
