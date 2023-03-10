@@ -1,5 +1,7 @@
 Config = {}
 
+Config.Debug = true
+
 Config.spawnPoints = {
     { x = 2630.7864, y = 3077.9456, z = 46.5250, heading = 315.1406 },
     { x = 2825.7617, y = 3420.0850, z = 54.5926, heading = 340.0},
