@@ -78,6 +78,7 @@ AddEventHandler('onResourceStop', function(resource)
   end 
 end)
 
+-- debug function
 logging = function(code, ...)
     if Config.Debug then
         local script = "[^2"..GetCurrentResourceName().."^0]"
