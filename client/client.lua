@@ -42,53 +42,48 @@ CreateThread(function()
     TaskTurnPedToFaceCoord(playerPed, spawnPoint.x, spawnPoint.y, spawnPoint.z, 0) 
   end
 
+  local playerPed = PlayerPedId()
+
   while true do
 
     Wait(0)
-    local playerPed = PlayerPedId()
     local playerCoords = GetEntityCoords(playerPed)
     ESX.Streaming.RequestAnimDict("anim@cellphone@in_car@ps", cb) 
     ESX.Streaming.RequestAnimDict("anim@amb@trailer@touch_screen@", cb) 
-
 
     -- Check if player is close to any callbox
     for i, callboxProp in ipairs(callboxProps) do
       local callboxCoords = GetEntityCoords(callboxProp)  
       local distance = GetDistanceBetweenCoords(playerCoords, callboxCoords, true)
 
-
       if distance < 2.0 then
         -- Show help notification and check if player presses E 
         ESX.ShowHelpNotification(Translation.HelpNotify)
         if IsControlJustPressed(0, 38) then 
-          ESX.ShowNotification(Translation.Notification, 5000, "info"
+          ESX.ShowNotification(Translation.Notification, 5000, "info")
 
           local count = 1
 
-          while count > 500 do 
+          while count < 500 do 
             count = count + 1
             DisablePlayerFiring(PlayerPedId(), true) 
           end
 
-          -- DisablePlayerFiring(PlayerPedId(), true) 
           TaskPlayAnim(PlayerPedId(), 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
 
-
           Wait(5000) 
-
 
           ClearPedTasks(PlayerPedId()) 
           DisablePlayerFiring(PlayerPedId(), false)  
 
-
           print("Funktioniert") 
           -- TODO: drecks serverevents adden für dispatch 
-          end
         end    
-      end  
+      end   
     end    
-  end)  
+  end
 end)
+
 -- Delete all callbox props when the script restarts
 AddEventHandler('onResourceStop', function(resource) 
   if GetCurrentResourceName() == resource then
