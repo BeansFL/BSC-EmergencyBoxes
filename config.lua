@@ -8,4 +8,7 @@ Config.spawnPoints = {
     { x = 2903.8450, y = 4151.8145, z = 49.2500, heading = 380.0}   
 }
 
-   
+Translation = {
+    BlipName = "SOS CALLBOX"
+    HelpNotify = "Press ~INPUT_CONTEXT~ to interact with the callbox"
+}

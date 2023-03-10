@@ -21,7 +21,7 @@ function spawnCallbox(x, y, z, heading)
   SetBlipColour(blip, 47) -- Set blip color to blue
   SetBlipAsShortRange(blip, true) -- Set blip to only show on close range
   BeginTextCommandSetBlipName("STRING")
-  AddTextComponentString("SOS CALLBOX") -- set blip name
+  AddTextComponentString(Translation.BlipName) -- set blip name
   EndTextCommandSetBlipName(blip)
  
   table.insert(callboxProps, callboxProp)
@@ -59,7 +59,7 @@ CreateThread(function()
 
       if distance < 2.0 then
         -- Show help notification and check if player presses E 
-        ESX.ShowHelpNotification('Press ~INPUT_CONTEXT~ to interact with the callbox')
+        ESX.ShowHelpNotification(Translation.HelpNotify)
         if IsControlJustPressed(0, 38) then 
 
           local count = 1
