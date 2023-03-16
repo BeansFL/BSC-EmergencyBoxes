@@ -58,17 +58,19 @@ CreateThread(function()
       if distance < 2.0 then
         -- Show help notification and check if player presses E 
         ShowHelpNotification()
-        if IsControlJustPressed(0, 38) then 
+        if IsControlJustPressed(0, 38) then  
+          FreezeEntityPosition(playerPed, true) -- Freeze player position
           PlaySound()
           ShowNotification2() 
 
           local count = 1
 
-          while count < 300 do
+          while count < 300 do 
             Wait(1) 
             count = count + 1
             print(count)
             DisablePlayerFiring(playerPed, true) 
+            FreezeEntityPosition(playerPed, true) -- Freeze player position
           end
  
           FreezeEntityPosition(playerPed, true) -- Freeze player position
@@ -82,11 +84,9 @@ CreateThread(function()
           FreezeEntityPosition(playerPed, false) -- Unfreeze player position
 
           DisablePlayerFiring(PlayerPedId(), false)  
-          print("firing enabled")
- 
-          print("Funktioniert") 
-          -- TODO: drecks serverevents adden für dispatch 
-          SendSOS()
+
+          TriggerEvent('sendSOS')
+
 
         end     
       end   
@@ -112,46 +112,15 @@ logging = function(code, ...)
     end
 end
 
-
+ 
  
 
-function SendSOS() 
-  local playerdata = ESX.GetPlayerData()
-  local playerPed = PlayerPedId()
-  local playerCoords = GetEntityCoords(playerPed)
-  local playerCoords = GetEntityCoords(PlayerPedId()) 
-  for i = 1, #Config.Jobs, 1 do
-    if playerdata.job.name == Config.Jobs[i] then -- check if the player has one of the specified jobs
-      local Blip = AddBlipForCoord(playerCoords.x, playerCoords.y, playerCoords.z) 
-      ShowNotification1()
-      PlaySound2()  
-      SetBlipRoute(Blip, true)
-      CreateThread(function()  
-        while Blip do 
-          SetBlipRouteColour(Blip, 1)
-          Wait(150) 
-          SetBlipRouteColour(Blip, 6)
-          Wait(150)   
-          SetBlipRouteColour(Blip, 35)
-          Wait(150)   
-          SetBlipRouteColour(Blip, 6) 
-        end 
-      end)  
-      SetBlipAlpha(Blip, 60)
-      SetBlipColour(Blip, 1) 
-      SetBlipFlashes(Blip, true)
-      SetBlipFlashInterval(Blip, 200)   
-      BeginTextCommandSetBlipName("STRING")  
-      AddTextComponentString("SOS")     
-      EndTextCommandSetBlipName(Blip)
+RegisterNetEvent('sendSOS')
+AddEventHandler('sendSOS', function()
+    TriggerServerEvent('sendSOS')
+    print("function wird getriggered")
+end)
  
-      Wait(60 * 1000) 
-     
-      RemoveBlip(Blip)
-      Blip = nil
-    end
-  end
-end
 
  
 function PlaySound(source)
