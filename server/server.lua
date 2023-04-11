@@ -1,51 +1,23 @@
-function SendSOS()
-    print("function wurde getriggered")
-    local playerdata = ESX.GetPlayerData(source)
+RegisterServerEvent('serverSOS')
+AddEventHandler('serverSOS', function()
+    local player = nil
     local playerPed = GetPlayerPed(source)
     local playerCoords = GetEntityCoords(playerPed)
-  
-    for i = 1, #Config.Jobs, 1 do
-        if playerdata.job.name == Config.Jobs[i] then
-            local blip = AddBlipForCoord(playerCoords.x, playerCoords.y, playerCoords.z)
-            SetBlipSprite(blip, 84)
-            SetBlipScale(blip, 1.2)
-            SetBlipColour(blip, 1)
-            BeginTextCommandSetBlipName("STRING")
-            AddTextComponentString("SOS")
-            EndTextCommandSetBlipName(blip)
-            ShowNotification1()
-            PlaySound2()
-            SetBlipRoute(blip, true)
-            SetBlipRouteColour(blip, 1)
-            SetBlipAlpha(blip, 250) 
-            SetBlipFlashes(blip, true)
-            SetBlipFlashInterval(blip, 400)
-            
-            CreateThread(function()
-                while DoesBlipExist(blip) do
-                    SetBlipRouteColour(blip, 1)
-                    Wait(150)
-                    SetBlipRouteColour(blip, 6)
-                    Wait(150)
-                    SetBlipRouteColour(blip, 35)
-                    Wait(150)
-                    SetBlipRouteColour(blip, 6)
-                end
-            end)
-            
-            Wait(60 * 1000)
-            
-            RemoveBlip(blip)
-            blip = nil
-            break
-        end
+
+    if Config.Framework == "ESX" then
+        player = ESX.GetPlayerFromId(source)
+    elseif Config.Framework == "QB" then
+        player = QBCore.Functions.GetPlayer(source)
+    else
+        print("Invalid framework specified in Config!")
+        return
     end
-end
 
-
-RegisterNetEvent('sendSOS')
-AddEventHandler('sendSOS', function()
-    SendSOS()
-    print("function wird getriggered")
-end)
+    for i = 1, #Config.Jobs, 1 do
+        if player.job.name == Config.Jobs[i] then 
+            TriggerClientEvent('clientSOS', -1, playerCoords.x, playerCoords.y, playerCoords.z)
+            break
+        end 
+    end 
+end)  
  

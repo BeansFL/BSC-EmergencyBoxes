@@ -4,21 +4,21 @@ local callboxProps = {} -- Table to store all callbox props
 function spawnCallbox(x, y, z, heading)
   local modelHash = GetHashKey('prop_sign_road_callbox')
   if not HasModelLoaded(modelHash) then
-    ESX.Streaming.RequestModel(modelHash, cb)
+    RequestModel(modelHash, cb)
     while not HasModelLoaded(modelHash) do
       Wait(0)  
     end
   end
   local callboxProp = CreateObject(modelHash, x, y, z, true, true, false)
-  SetEntityHeading(callboxProp, heading)
+  SetEntityHeading(callboxProp, heading) 
   FreezeEntityPosition(callboxProp, true) 
  
   -- Add blip for the spawn point
   local blip = AddBlipForCoord(x, y, z)
-  SetBlipSprite(blip, 526) -- 2 is the blip sprite for a callbox
-  SetBlipDisplay(blip, 2) -- 2 is the display ID for blips on the radar and map
+  SetBlipSprite(blip, 526) -- 2 is the blip sprite for a callbox 
+  SetBlipDisplay(blip, 2) -- 2 is the display ID for blips on the radar and map 
   SetBlipScale(blip, 0.8) -- Set blip size 
-  SetBlipColour(blip, 47) -- Set blip color to blue
+  SetBlipColour(blip, 47) -- Set blip color to orange
   SetBlipAsShortRange(blip, true) -- Set blip to only show on close range
   BeginTextCommandSetBlipName("STRING") 
   AddTextComponentString(Translation.BlipName) -- set blip name
@@ -33,7 +33,7 @@ function deleteCallboxProps()
     DeleteObject(callboxProp)
   end
   callboxProps = {} 
-end
+end  
 
 -- Main loop 
 CreateThread(function()
@@ -47,8 +47,8 @@ CreateThread(function()
   while true do 
     Wait(0)
     local playerCoords = GetEntityCoords(playerPed)
-    ESX.Streaming.RequestAnimDict("anim@cellphone@in_car@ps", cb)  
-    ESX.Streaming.RequestAnimDict("anim@amb@trailer@touch_screen@", cb) 
+    RequestAnimDict("anim@cellphone@in_car@ps", cb)  
+    RequestAnimDict("anim@amb@trailer@touch_screen@", cb) 
 
     -- Check if player is close to any callbox
     for i, callboxProp in ipairs(callboxProps) do
@@ -85,7 +85,8 @@ CreateThread(function()
 
           DisablePlayerFiring(PlayerPedId(), false)  
 
-          TriggerEvent('sendSOS')
+          TriggerServerEvent('serverSOS')
+
 
 
         end     
@@ -115,11 +116,7 @@ end
  
  
 
-RegisterNetEvent('sendSOS')
-AddEventHandler('sendSOS', function()
-    TriggerServerEvent('sendSOS')
-    print("function wird getriggered")
-end)
+
  
 
  
@@ -132,3 +129,21 @@ function PlaySound2(source)
   local message = { PayloadType = {"SOS2"}, Payload = source}
   SendNUIMessage(message) 
 end 
+
+RegisterNetEvent('clientSOS')
+AddEventHandler('clientSOS', function(x, y, z)
+    local blip = AddBlipForCoord(x, y, z) 
+    PlaySound2() -- pass in the source argument
+    ShowNotification1(text)
+    SetBlipSprite(blip, 4)
+    SetBlipScale(blip, 0.4)
+    SetBlipColour(blip, 1)
+    BeginTextCommandSetBlipName("STRING")
+    AddTextComponentString("SOS")
+    EndTextCommandSetBlipName(blip)
+    SetBlipRoute(blip, true)
+    SetBlipRouteColour(blip, 1) 
+    SetBlipAlpha(blip, 250) 
+    SetBlipFlashes(blip, true)
+end)  
+ 
