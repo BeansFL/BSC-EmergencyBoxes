@@ -145,5 +145,10 @@ AddEventHandler('clientSOS', function(x, y, z)
     SetBlipRouteColour(blip, 1) 
     SetBlipAlpha(blip, 250) 
     SetBlipFlashes(blip, true)
-end)  
+    
+    Wait(Config.BlipTime * 1000) -- wait for the specified number of seconds
+    
+    RemoveBlip(blip) -- remove the blip
+end) 
+
  
