@@ -17,6 +17,8 @@ Translation = {
     DispatchNotification = "SOS WAS PRESSED; EMERGENCY REQUIRED. GPS WAS SET"
 }
 
+Config.BlipTime = 30 -- in seconds
+
 Config.Jobs = { 
     "police",
     "doa", 
