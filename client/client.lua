@@ -7,7 +7,7 @@ function spawnCallbox(x, y, z, heading)
     RequestModel(modelHash, cb)
     while not HasModelLoaded(modelHash) do
       Wait(0)  
-    end
+    end 
   end
   local callboxProp = CreateObject(modelHash, x, y, z, true, true, false)
   SetEntityHeading(callboxProp, heading) 
@@ -33,92 +33,67 @@ function deleteCallboxProps()
     DeleteObject(callboxProp)
   end
   callboxProps = {} 
-end  
+end
 
--- Main loop 
+
+
+-- recode
+
 CreateThread(function()
-  local playerPed = PlayerPedId()
-
-  for i, spawnPoint in ipairs(Config.spawnPoints) do 
-    spawnCallbox(spawnPoint.x, spawnPoint.y, spawnPoint.z, spawnPoint.heading)
-    TaskTurnPedToFaceCoord(playerPed, spawnPoint.x, spawnPoint.y, spawnPoint.z, 0) 
-  end
-
-  while true do 
-    Wait(0)
-    local playerCoords = GetEntityCoords(playerPed)
-    RequestAnimDict("anim@cellphone@in_car@ps", cb)  
-    RequestAnimDict("anim@amb@trailer@touch_screen@", cb) 
-
-    -- Check if player is close to any callbox
-    for i, callboxProp in ipairs(callboxProps) do
-      local callboxCoords = GetEntityCoords(callboxProp)  
-      local distance = #(playerCoords.xy - callboxCoords.xy)
-
-      if distance < 2.0 then
-        -- Show help notification and check if player presses E 
-        ShowHelpNotification()
-        if IsControlJustPressed(0, 38) then  
-          FreezeEntityPosition(playerPed, true) -- Freeze player position
-          PlaySound()
-          ShowNotification2() 
-
-          local count = 1
-
-          while count < 300 do 
-            Wait(1) 
-            count = count + 1
-            print(count)
-            DisablePlayerFiring(playerPed, true) 
-            FreezeEntityPosition(playerPed, true) -- Freeze player position
-          end
- 
-          FreezeEntityPosition(playerPed, true) -- Freeze player position
-
-          TaskPlayAnim(PlayerPedId(), 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
-
-          Wait(5000) 
-
-          ClearPedTasks(PlayerPedId()) 
-
-          FreezeEntityPosition(playerPed, false) -- Unfreeze player position
-
-          DisablePlayerFiring(PlayerPedId(), false)  
-
-          TriggerServerEvent('serverSOS')
-
-
-
-        end     
-      end   
-    end    
-  end
+    local playerPed = PlayerPedId()
+    for i, spawnPoint in ipairs(Config.spawnPoints) do 
+      spawnCallbox(spawnPoint.x, spawnPoint.y, spawnPoint.z, spawnPoint.heading)
+      TaskTurnPedToFaceCoord(playerPed, spawnPoint.x, spawnPoint.y, spawnPoint.z, 0) 
+    end
+    local sleep = 1
+    while true do
+        for k,v in pairs(Config.spawnPoints) do
+            if #(GetEntityCoords(PlayerPedId()) - vector3(v.x, v.y, v.z)) < 2.0 then
+                sleep = 1
+                ShowHelpNotification()
+                if IsControlJustPressed(0, 38) then
+                  ShowNotification2()
+                  print("E pressed")
+                    FreezeEntityPosition(playerPed, true) -- Freeze player position
+                    PlaySound()
+                    local count = 1
+                    while count < 300 do 
+                        Wait(1)
+                        count = count + 1
+                        DisablePlayerFiring(playerPed, true) 
+                        FreezeEntityPosition(playerPed, true) -- Freeze player position
+                    end
+                    FreezeEntityPosition(playerPed, true) -- Freeze player position
+                    TaskPlayAnim(PlayerPedId(), 'anim@cellphone@in_car@ps', 'cellphone_call_listen_base', 1.0, 1.0, -1, 50, 0, false, false, false)
+                    Wait(5000) 
+                    ClearPedTasks(PlayerPedId()) 
+                    FreezeEntityPosition(playerPed, false) -- Unfreeze player position
+                    DisablePlayerFiring(PlayerPedId(), false)  
+                    TriggerServerEvent('serverSOS')
+                else
+                    sleep = 1
+                end
+            end
+        end
+        Wait(sleep)
+    end
 end)
-
-
-
 
 -- Delete all callbox props when the script restarts
 AddEventHandler('onResourceStop', function(resource) 
   if GetCurrentResourceName() == resource then
-    deleteCallboxProps() 
+    deleteCallboxProps()
   end 
-end)
+end) 
 
 -- debug function
 logging = function(code, ...)
     if Config.Debug then
         local script = "[^2"..GetCurrentResourceName().."^0]"
-        log.logging(script, code, ...)
+        print(string.format(script.." %s", code), ...)
     end
-end
+end 
 
- 
-
-
- 
-
- 
 function PlaySound(source)
   local message = { PayloadType = {"SOS"}, Payload = source}
   SendNUIMessage(message) 
@@ -129,9 +104,11 @@ function PlaySound2(source)
   SendNUIMessage(message) 
 end 
 
+local blip = nil
+
 RegisterNetEvent('clientSOS')
 AddEventHandler('clientSOS', function(x, y, z)
-    local blip = AddBlipForCoord(x, y, z) 
+    blip = AddBlipForCoord(x, y, z) 
     PlaySound2() -- pass in the source argument
     ShowNotification1(text)
     SetBlipSprite(blip, 4)
@@ -139,15 +116,26 @@ AddEventHandler('clientSOS', function(x, y, z)
     SetBlipColour(blip, 1)
     BeginTextCommandSetBlipName("STRING")
     AddTextComponentString("SOS")
-    EndTextCommandSetBlipName(blip)
+    EndTextCommandSetBlipName(blip) 
     SetBlipRoute(blip, true)
     SetBlipRouteColour(blip, 1) 
     SetBlipAlpha(blip, 250) 
     SetBlipFlashes(blip, true)
-    
-    Wait(Config.BlipTime * 1000) -- wait for the specified number of seconds
-    
-    RemoveBlip(blip) -- remove the blip
-end) 
+    removeBlip()    
+end)  
 
- 
+function removeBlip()
+  print("Removing blip in " .. Config.BlipTime .. " seconds.")
+  Wait(Config.BlipTime * 1000) 
+  if blip ~= nil then
+    RemoveBlip(blip)
+    print("Blip removed.")
+    blip = nil
+  end
+end
+
+
+RegisterCommand("removeblip", function()
+  RemoveBlip(blip)
+  print(blip)
+end) 
