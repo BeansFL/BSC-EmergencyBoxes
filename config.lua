@@ -10,14 +10,14 @@ Config.spawnPoints = {
     { x = 2903.8450, y = 4151.8145, z = 49.2500, heading = 380.0}   
 }
 
+Config.BlipTime = 10 -- in seconds
+
 Translation = {
     BlipName = "SOS CALLBOX",
     HelpNotify = "Press ~INPUT_CONTEXT~ to interact with the callbox",
     Notification = "You called the police!",
     DispatchNotification = "SOS WAS PRESSED; EMERGENCY REQUIRED. GPS WAS SET"
 }
-
-Config.BlipTime = 30 -- in seconds
 
 Config.Jobs = { 
     "police",
