@@ -135,7 +135,4 @@ function removeBlip()
 end
 
 
-RegisterCommand("removeblip", function()
-  RemoveBlip(blip)
-  print(blip)
-end) 
+
